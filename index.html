@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>GifTastic</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <section class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-sm">
+
+                <div id="buttons">
+
+                    <button data-country="Germany" class="country-btn">
+                    Germany
+                    </button>
+                    <button data-country="USA" class="country-btn">
+                    USA
+                    </button>
+        
+                    <button data-country="Spain" class="country-btn">
+                    Spain
+                    </button>
+                    
+                    <button data-country="France" class="country-btn">
+                    France
+                    </button>
+        
+                </div>
+
+                <div class = "add-button"></div>
+
+            </div>
+            
+            <div class="col-sm">
+
+                <div class="form-group">
+                    <label for="searchInput">Add a country</label>
+                    <input type="text" class="form-control" id="addButton" placeholder="Enter country">
+                    <button type="submit" class="btn btn-primary" id="add-country">Submit</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="container">
+
+        <div class="row-sm">
+
+            <div class="col-sm">
+
+                <div id="gifs" class="card"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    var buttons = ["Germany", "France", "Spain", "USA"];
+
+    $("button").on("click", function() {
+      var country = $(this).attr("data-country");
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        country + "&api_key=TPafFNWh6JJaTnOFO27YnRyj3faBTcpJ&limit=10&lang=en";
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+        .then(function(response) {
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div>");
+
+            var country = results[i].country;
+
+            var p = $("<p>").text();
+
+            var countryImage = $("<img>");
+            countryImage.attr("src", results[i].images.fixed_height.url);
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(countryImage);
+
+            $("#gifs").prepend(gifDiv);
+          }
+        });
+    });
+
+    $("#add-country").on("click", function(event) {
+        event.preventDefault();
+
+        var country = $("#addButton").val().trim();
+
+        country.push(buttons);
+        
+      });
+
+      $(document).on("click", ".country-btn", countryImage);
+
+      renderButtons();
+  </script>
+</body>
+
+</html>
